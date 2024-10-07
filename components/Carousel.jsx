@@ -61,7 +61,7 @@ const Carousel = () => {
             <div>
               <Image
                 src={item.src}
-                className="object-cover object-center aspect-video"
+                className="object-cover object-center h-[30vh]"
                 alt="Carousel Image 2"
               />
               <div className="mt-4">

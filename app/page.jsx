@@ -16,7 +16,7 @@ const Hero = () => {
         <div className="mt-12 px-4">
           <Carousel />
         </div>
-        <div className="px-4 mt-32">
+        <div className="px-4 mt-12">
           <div className="border-b border-black w-full" />
         </div>
       </main>
