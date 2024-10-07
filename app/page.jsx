@@ -5,7 +5,7 @@ import Carousel from "@/components/Carousel";
 
 const Hero = () => {
   return (
-    <section className="w-full">
+    <section className="flex flex-col w-full h-[100dvh] relative">
       <main className="mt-32">
         <h1 className="uppercase font-regular text-center mb-4 text-sm">
           Discover Smarter, Explore Further
