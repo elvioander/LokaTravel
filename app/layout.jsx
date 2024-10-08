@@ -21,10 +21,7 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body className={`${roboto.className} relative`}>
-        <MainHeader />
-        {children}
-      </body>
+      <body className={`${roboto.className} relative`}>{children}</body>
     </html>
   );
 };
