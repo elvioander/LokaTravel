@@ -9,8 +9,9 @@ import { Menu09Icon } from "hugeicons-react";
 const MainHeader = () => {
   return (
     <nav className="flex fixed w-full  top-0 bg-white z-20 items-center justify-between p-4 shadow-sm">
-      <a href="/">
-        <Image src={logoImg} alt="LokaTravel logo" width={53} height={53} />
+      <a href="/" className="flex gap-x-2 items-center">
+        <Image src={logoImg} alt="LokaTravel logo" width={45} height={45} />
+        <p className="font-black text-3xl">LokaTravel</p>
       </a>
       <button className="rounded-full border border-[#d8d8d8] p-3">
         <Menu09Icon size={20} />
