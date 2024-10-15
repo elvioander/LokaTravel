@@ -2,16 +2,16 @@
 import React from "react";
 
 import Image from "next/image";
-import Link from "next/link";
 
 import { useSession } from "next-auth/react";
 
 import logoImg from "@/public/images/LokaTravel.png";
-import { Menu09Icon, Search01Icon, UserIcon } from "hugeicons-react";
+import { Search01Icon, UserIcon } from "hugeicons-react";
+import { handleSignOut } from "@/app/actions/authActions";
 
 const MainHeader = ({ showSearchBar, isMenuActive, onMenuClick }) => {
   const { data: session } = useSession();
-  console.log(session);
+  console.log(`session is: ${session}`);
   return (
     <nav className="flex fixed w-full  top-0 bg-white z-20 items-center justify-between p-4 shadow-sm">
       <div href="/" className="flex gap-x-2 items-center">
@@ -37,9 +37,12 @@ const MainHeader = ({ showSearchBar, isMenuActive, onMenuClick }) => {
           <UserIcon size={20} />
         </button>
       ) : (
-        <a href="#" className="font-semibold">
-          {session.user.name}
-        </a>
+        <form action={handleSignOut}>
+          <p>{session.user.name}</p>
+          <button type="submit" href="#" className="font-semibold">
+            Sign Out
+          </button>
+        </form>
       )}
     </nav>
   );
