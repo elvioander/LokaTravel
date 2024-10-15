@@ -7,10 +7,24 @@ import SearchBar from "@/components/SearchBar";
 import Slider from "@/components/Slider";
 import MainFooter from "@/components/main-footer/MainFooter";
 import MainHeader from "@/components/main-header/main-header";
+import Login from "@/components/login/Login";
 
 const Hero = () => {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(true);
   const searchBarRef = useRef(null);
+
+  const [isMenuClicked, setIsMenuClicked] = useState(false);
+  useEffect(() => {
+    if (isMenuClicked) {
+      document.body.style.overflow = "hidden"; // Disable scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Enable scrolling again
+    }
+
+    return () => {
+      document.body.style.overflow = "auto"; // Clean up on component unmount
+    };
+  }, [isMenuClicked]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,7 +47,11 @@ const Hero = () => {
 
   return (
     <>
-      <MainHeader showSearchBar={isSearchBarVisible} />
+      <MainHeader
+        showSearchBar={isSearchBarVisible}
+        isMenuActive={isMenuClicked}
+        onMenuClick={setIsMenuClicked}
+      />
       <section className="flex flex-col w-full relative">
         <main className="mt-28">
           <div className="px-6 flex flex-col gap-y-4">
@@ -57,6 +75,8 @@ const Hero = () => {
         </main>
       </section>
       <MainFooter />
+
+      {isMenuClicked && <Login onMenuClick={setIsMenuClicked} />}
     </>
   );
 };

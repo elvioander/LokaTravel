@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import logoImg from "@/public/images/LokaTravel.png";
-import { Menu09Icon, Search01Icon } from "hugeicons-react";
+import { Menu09Icon, Search01Icon, UserIcon } from "hugeicons-react";
 
-const MainHeader = ({ showSearchBar }) => {
+const MainHeader = ({ showSearchBar, isMenuActive, onMenuClick }) => {
   return (
     <nav className="flex fixed w-full  top-0 bg-white z-20 items-center justify-between p-4 shadow-sm">
       <div href="/" className="flex gap-x-2 items-center">
@@ -24,8 +24,11 @@ const MainHeader = ({ showSearchBar }) => {
           </div>
         )}
       </div>
-      <button className="rounded-full border border-[#d8d8d8] p-3">
-        <Menu09Icon size={20} />
+      <button
+        className="rounded-full border border-[#d8d8d8] p-3"
+        onClick={() => onMenuClick(!isMenuActive)}
+      >
+        <UserIcon size={20} />
       </button>
     </nav>
   );
