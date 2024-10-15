@@ -4,6 +4,7 @@ import Image from "next/image";
 import logoImg from "@/public/images/LokaTravel.png";
 import { Cancel01Icon, GoogleIcon, Mail01Icon } from "hugeicons-react";
 import LoginButton from "./LoginButton";
+import Legal from "./Legal";
 
 const Login = ({ onMenuClick }) => {
   return (
@@ -14,29 +15,16 @@ const Login = ({ onMenuClick }) => {
           Sign in to unlock the best of LokaTravel.
         </h2>
         <div className="flex flex-col mt-8 gap-y-4">
-          <LoginButton icon={GoogleIcon}>Continue with Google</LoginButton>
-          <LoginButton icon={Mail01Icon}>Continue with email</LoginButton>
+          <LoginButton icon={GoogleIcon} href="#">
+            Continue with Google
+          </LoginButton>
+          <LoginButton icon={Mail01Icon} href="/auth/signin">
+            Continue with email
+          </LoginButton>
         </div>
-        <p className="text-center mt-8 text-sm">
-          By proceeding, you agree to our{" "}
-          <a href="#" className="underline font-semibold">
-            Terms of Use
-          </a>{" "}
-          and confirm you have read our{" "}
-          <a href="#" className="underline font-semibold">
-            Privacy and Cookie Statement
-          </a>
-        </p>
-        <p className="mt-4 text-sm">
-          This site is protected by reCAPTCHA and the{" "}
-          <a href="#" className="underline font-semibold">
-            Google Privacy Policy and{" "}
-            <a href="#" className="underline font-semibold">
-              Terms of Service
-            </a>{" "}
-            apply
-          </a>
-        </p>
+        <div className="mt-8">
+          <Legal />
+        </div>
       </div>
       <button
         className="absolute z-30 right-6 top-6"

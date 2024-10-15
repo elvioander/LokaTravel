@@ -6,6 +6,8 @@ import "./globals.css";
 
 import MainHeader from "@/components/main-header/main-header";
 
+import { SessionProvider } from "next-auth/react";
+
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["latin"],
@@ -20,9 +22,11 @@ export const metadata = {
 
 const RootLayout = ({ children }) => {
   return (
-    <html lang="en">
-      <body className={`${roboto.className} relative`}>{children}</body>
-    </html>
+    <SessionProvider>
+      <html lang="en">
+        <body className={`${roboto.className} relative`}>{children}</body>
+      </html>
+    </SessionProvider>
   );
 };
 

@@ -10,11 +10,15 @@
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.0",
+    "add": "^2.0.6",
+    "form": "^0.2.5",
     "hugeicons-react": "^0.3.0",
+    "input": "^1.0.1",
     "next": "14.2.14",
     "next-auth": "^5.0.0-beta.22",
     "react": "^18",
     "react-dom": "^18",
+    "shadcn-ui": "^0.9.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
