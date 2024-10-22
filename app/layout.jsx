@@ -4,7 +4,7 @@ import { Roboto } from "next/font/google";
 
 import "./globals.css";
 
-import MainHeader from "@/components/main-header/main-header";
+import Provider from "@/components/Provider";
 
 import { SessionProvider } from "next-auth/react";
 
@@ -22,11 +22,11 @@ export const metadata = {
 
 const RootLayout = ({ children }) => {
   return (
-    <SessionProvider>
-      <html lang="en">
-        <body className={`${roboto.className} relative`}>{children}</body>
-      </html>
-    </SessionProvider>
+    <html lang="en">
+      <body className={`${roboto.className} relative`}>
+        <Provider>{children}</Provider>
+      </body>
+    </html>
   );
 };
 

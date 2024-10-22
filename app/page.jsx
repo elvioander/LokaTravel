@@ -6,7 +6,7 @@ import Carousel from "@/components/Carousel";
 import SearchBar from "@/components/SearchBar";
 import Slider from "@/components/Slider";
 import MainFooter from "@/components/main-footer/MainFooter";
-import MainHeader from "@/components/main-header/main-header";
+import MainHeader from "@/components/main-header/MainHeader";
 import Login from "@/components/login/Login";
 
 const Hero = () => {
