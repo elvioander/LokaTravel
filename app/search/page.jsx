@@ -78,6 +78,7 @@ const SearchPage = () => {
                   <p className="text-sm text-gray-600">
                     {post.City}, Indonesia
                   </p>
+                  <p>{post.Category}</p>
                 </div>
               </div>
             ))}
