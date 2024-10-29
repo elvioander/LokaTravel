@@ -2,6 +2,8 @@
 import MainHeader from "@/components/main-header/MainHeader";
 import React from "react";
 
+import Link from "next/link";
+
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -62,7 +64,7 @@ const SearchPage = () => {
         <div className="mt-4 flex flex-col gap-y-4">
           {posts &&
             posts.map((post) => (
-              <div className="flex gap-x-2">
+              <Link href={`/places/${post._id}`} className="flex gap-x-2">
                 <Image
                   src="/images/carousel1.jpg"
                   width={135}
@@ -80,7 +82,7 @@ const SearchPage = () => {
                   </p>
                   <p>{post.Category}</p>
                 </div>
-              </div>
+              </Link>
             ))}
         </div>
       </section>
