@@ -21,7 +21,6 @@ const MainHeader = ({
 }) => {
   const { data: session } = useSession();
   const path = usePathname();
-  const params = useSearchParams();
   return (
     <nav className="flex fixed w-full  top-0 bg-white z-20 items-center justify-between p-4 shadow-sm">
       <div className="flex gap-x-2 items-center">
@@ -72,6 +71,7 @@ const MainHeader = ({
             width={40}
             height={40}
             className="rounded-full"
+            alt="Profile picture"
           />
           <button onClick={signOut} className="text-red-500 font-bold">
             Sign-Out

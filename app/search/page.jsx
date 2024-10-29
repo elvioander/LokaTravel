@@ -1,12 +1,12 @@
 "use client";
-import MainHeader from "@/components/main-header/MainHeader";
 import React from "react";
-
-import Link from "next/link";
-
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+
 import Image from "next/image";
+import Link from "next/link";
+
+import MainHeader from "@/components/main-header/MainHeader";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -25,19 +25,6 @@ const SearchPage = () => {
     setInitialSearch();
   }, []);
 
-  const [isMenuClicked, setIsMenuClicked] = useState(false);
-  useEffect(() => {
-    if (isMenuClicked) {
-      document.body.style.overflow = "hidden"; // Disable scrolling
-    } else {
-      document.body.style.overflow = "auto"; // Enable scrolling again
-    }
-
-    return () => {
-      document.body.style.overflow = "auto"; // Clean up on component unmount
-    };
-  }, [isMenuClicked]);
-
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const fetchPosts = async () => {
@@ -51,8 +38,6 @@ const SearchPage = () => {
   return (
     <>
       <MainHeader
-        isMenuActive={isMenuClicked}
-        onMenuClick={setIsMenuClicked}
         search={search}
         setSearch={setSearch}
         handleSearch={handleSearch}

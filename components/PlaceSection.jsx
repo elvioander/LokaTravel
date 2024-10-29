@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 
 import { StarIcon, HeartAddIcon } from "hugeicons-react";
+import Rating from "./Rating";
 
 const PlaceSection = ({ places, title, type, children }) => {
   return (
@@ -51,16 +52,7 @@ const PlaceSection = ({ places, title, type, children }) => {
                 </div>
                 <div className="mt-2">
                   <p className="text-lg font-bold">{place.Place_Name}</p>
-                  <div className="flex items-center gap-x-2 mt-1">
-                    <div className="flex gap-x-[0.15rem]">
-                      <div className="w-3 h-3 bg-[#34BEE0] rounded-full" />
-                      <div className="w-3 h-3 bg-[#34BEE0] rounded-full" />
-                      <div className="w-3 h-3 bg-[#34BEE0] rounded-full" />
-                      <div className="w-3 h-3 bg-[#34BEE0] rounded-full" />
-                      <div className="w-3 h-3 bg-[#34BEE0] rounded-full" />
-                    </div>
-                    <p className="leading-none">{place.Rating}</p>
-                  </div>
+                  <Rating rating={place.Rating} />
                   <p className="text-xs mt-2 font-medium">
                     From Rp.{new Intl.NumberFormat("id-ID").format(place.Price)}{" "}
                     per adult
