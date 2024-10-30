@@ -9,7 +9,6 @@ export const GET = async (request) => {
     const { searchParams } = new URL(request.url);
     const searchTerm = searchParams.get("q"); // Get the 'q' param from query
 
-    // Build a more flexible regular expression pattern
     const regex = new RegExp(searchTerm.split(" ").join("|"), "i"); // Split search term by space and join with '|'
 
     // Query the database
@@ -20,11 +19,22 @@ export const GET = async (request) => {
       ],
     });
 
-    if (!places.length) {
+    // Separate matches by Place_Name and Description
+    const placeNameMatches = places.filter((place) =>
+      regex.test(place.Place_Name)
+    );
+    const descriptionMatches = places.filter(
+      (place) => !regex.test(place.Place_Name)
+    );
+
+    // Concatenate both arrays, prioritizing Place_Name matches
+    const sortedPlaces = [...placeNameMatches, ...descriptionMatches];
+
+    if (!sortedPlaces.length) {
       return new Response("Places Not Found", { status: 404 });
     }
 
-    return new Response(JSON.stringify(places), { status: 200 });
+    return new Response(JSON.stringify(sortedPlaces), { status: 200 });
   } catch (error) {
     console.error(error);
     return new Response("Internal Server Error", { status: 500 });
