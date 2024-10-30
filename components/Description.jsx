@@ -4,7 +4,6 @@ const Description = ({ id, text, amountOfWords = 36 }) => {
   if (!text) {
     return (
       <>
-        <p className="text-2xl font-bold">About</p>
         <p className="text-gray-500">No description available.</p>
       </>
     );
@@ -25,7 +24,7 @@ const Description = ({ id, text, amountOfWords = 36 }) => {
   };
 
   return (
-    <p id={id}>
+    <p id={id} className="text-sm">
       {beginText}
       {itCanOverflow && (
         <>

@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import MainHeader from "@/components/main-header/MainHeader";
+import Rating from "@/components/Rating";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -35,6 +36,24 @@ const SearchPage = () => {
     fetchPosts();
   }, []);
 
+  const isOpenNow = (openHour, closeHour) => {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    // Convert openHour and closeHour to hours and minutes
+    const [openHourTime, openMinuteTime] = openHour.split(".").map(Number);
+    const [closeHourTime, closeMinuteTime] = closeHour.split(".").map(Number);
+
+    // Check if the current time is within operating hours
+    const isOpenNow =
+      (currentHour > openHourTime ||
+        (currentHour === openHourTime && currentMinute >= openMinuteTime)) &&
+      (currentHour < closeHourTime ||
+        (currentHour === closeHourTime && currentMinute < closeMinuteTime));
+    return isOpenNow;
+  };
+
   return (
     <>
       <MainHeader
@@ -58,14 +77,22 @@ const SearchPage = () => {
                   alt={post.Place_Name}
                 />
                 <div className="flex flex-col items-start">
-                  <div className="px-2 py-1 uppercase text-xs border border-black rounded-lg font-medium">
-                    {post.Category}
+                  <div className="flex gap-x-2">
+                    <div className="px-2 py-1 uppercase text-xs border border-black rounded-lg font-medium">
+                      {post.Category}
+                    </div>
+                    {isOpenNow(post.Opening_Hours, post.Closed_Hours) ? (
+                      <p className="font-bold text-green-500">Open</p>
+                    ) : (
+                      <p className="text-red-500">Closed</p>
+                    )}
                   </div>
                   <p className="font-medium mt-2">{post.Place_Name}</p>
                   <p className="text-sm text-gray-600">
                     {post.City}, Indonesia
                   </p>
-                  <p>{post.Category}</p>
+                  <p className="text-sm mt-2">{post.Category}</p>
+                  <Rating rating={post.Rating} />
                 </div>
               </Link>
             ))}

@@ -9,9 +9,15 @@ export const GET = async (request) => {
     const { searchParams } = new URL(request.url);
     const searchTerm = searchParams.get("q"); // Get the 'q' param from query
 
+    // Build a more flexible regular expression pattern
+    const regex = new RegExp(searchTerm.split(" ").join("|"), "i"); // Split search term by space and join with '|'
+
     // Query the database
     const places = await Place.find({
-      Place_Name: { $regex: searchTerm, $options: "i" }, // Case-insensitive search
+      $or: [
+        { Place_Name: { $regex: regex } }, // Search by Place_Name
+        { Description: { $regex: regex } }, // Optionally, search by Description
+      ],
     });
 
     if (!places.length) {

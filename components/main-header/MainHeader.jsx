@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
+import { useState } from "react";
 
 import Image from "next/image";
-
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
@@ -10,6 +10,7 @@ import { useParams, useSearchParams, usePathname } from "next/navigation";
 
 import logoImg from "@/public/images/LokaTravel.png";
 import { Search01Icon, UserIcon } from "hugeicons-react";
+import Sidebar from "../Sidebar";
 
 const MainHeader = ({
   showSearchBar,
@@ -21,6 +22,8 @@ const MainHeader = ({
 }) => {
   const { data: session } = useSession();
   const path = usePathname();
+
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   return (
     <nav className="flex fixed w-full  top-0 bg-white z-20 items-center justify-between p-4 shadow-sm">
       <div className="flex gap-x-2 items-center">
@@ -72,10 +75,13 @@ const MainHeader = ({
             height={40}
             className="rounded-full"
             alt="Profile picture"
+            onClick={() => setIsSideBarOpen(!isSideBarOpen)}
           />
-          <button onClick={signOut} className="text-red-500 font-bold">
-            Sign-Out
-          </button>
+          {isSideBarOpen && (
+            <div className="absolute -bottom-[5.5rem] right-4">
+              <Sidebar onSignOut={signOut} />
+            </div>
+          )}
         </div>
       )}
     </nav>

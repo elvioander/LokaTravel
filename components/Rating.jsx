@@ -16,7 +16,7 @@ const Rating = ({ rating }) => {
           />
         ))}
       </div>
-      <p className="leading-none">{rating}</p>
+      <p className="leading-none">{rating}/5.0</p>
     </div>
   );
 };

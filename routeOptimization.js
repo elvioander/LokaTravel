@@ -1,6 +1,6 @@
 const { Client } = require("@googlemaps/google-maps-services-js");
 
-const apiKey = "AIzaSyCiDhwEvrRa2TD8BPN8RxLhAJCSEDLdsMg";
+const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 const locations = [
   "John Residence karawaci",
   "living plaza cinere",

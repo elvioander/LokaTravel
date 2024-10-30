@@ -9,11 +9,15 @@ import Link from "next/link";
 
 import MainHeader from "@/components/main-header/MainHeader";
 import Rating from "@/components/Rating";
-
-import { Location03Icon } from "hugeicons-react";
 import OperatingTime from "@/components/OperatingTime";
 import MainFooter from "@/components/main-footer/MainFooter";
 import Description from "@/components/Description";
+
+import {
+  Location03Icon,
+  RoadLocation02Icon,
+  Time02Icon,
+} from "hugeicons-react";
 
 const DetailsPage = ({ params }) => {
   const placeId = params.placeId;
@@ -43,6 +47,44 @@ const DetailsPage = ({ params }) => {
     };
     fetchPost();
   }, []);
+
+  const [location, setLocation] = useState(null);
+  const [distanceDuration, setDistanceDuration] = useState(null);
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ latitude, longitude });
+          getDistanceFromApi(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+  const getDistanceFromApi = async (latitude, longitude) => {
+    try {
+      const response = await fetch("/api/places/locate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          origin: { lat: latitude, lng: longitude },
+          destination: { lat: post.Lat, lng: post.Long },
+        }),
+      });
+
+      const data = await response.json();
+      setDistanceDuration(data);
+    } catch (error) {
+      console.error("Error fetching distance:", error);
+    }
+  };
   return (
     <>
       <MainHeader
@@ -77,18 +119,37 @@ const DetailsPage = ({ params }) => {
           height={1920}
           className="mt-8"
         />
+        <div className="px-4 mt-8">
+          <div className="border border-gray-300 shadow-[0_0_15px_rgba(0,0,0,0.3)] rounded-xl p-2">
+            <p className="text-2xl font-bold">About</p>
+            <Description id={1} text={post.Description} />
+          </div>
+        </div>
         <div className="w-full px-4 mt-8">
           <div className="text-lg">
-            <p className="font-medium">Tours & experiences</p>
-            <p>Explore different ways to experience this place.</p>
+            <p className="font-medium">Distance & Duration</p>
+            <div className="flex gap-x-4 text-base mt-2">
+              <RoadLocation02Icon />
+              <p>
+                {distanceDuration ? `${distanceDuration.distance}` : "? KM"}
+              </p>
+            </div>
+            <div className="flex gap-x-4 text-base mt-1">
+              <Time02Icon />
+              <p>
+                {" "}
+                {distanceDuration
+                  ? `${distanceDuration.duration}`
+                  : "? Hrs (estimated)"}
+              </p>
+            </div>
           </div>
-          <button className="bg-black mt-6 text-white rounded-full py-4 text-center w-full font-medium">
-            See options
+          <button
+            onClick={getUserLocation}
+            className="bg-black mt-6 text-white rounded-full py-4 text-center w-full font-medium"
+          >
+            Locate Me
           </button>
-        </div>
-        <div className="px-4 mt-8">
-          <p className="text-2xl font-bold">About</p>
-          <Description id={1} text={post.Description} />
         </div>
         <MainFooter />
       </section>
