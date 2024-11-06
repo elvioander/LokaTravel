@@ -1,16 +1,21 @@
+// pages/api/distance.js
+import { Client } from "@googlemaps/google-maps-services-js";
 import { connectToDB } from "@/utils/database";
-const { Client } = require("@googlemaps/google-maps-services-js");
 import Trip from "@/models/trip";
 
 export const POST = async (req) => {
-  "Please print me bang";
-  const { userId, tripLocations } = await req.json;
-  console.log(tripLocations);
+  const { userId, tripLocations } = await req.json();
+
   try {
     await connectToDB();
 
     const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-    const locations = selectedLocations.map((location) => location.Place_Name);
+
+    // Modify this to extract Lat and Long from tripLocations
+    const locations = tripLocations.map((location) => ({
+      lat: location.Lat,
+      lng: location.Long,
+    }));
 
     // Function to get the distance matrix using Google Maps API
     async function getDistanceMatrix(apiKey, locations) {
@@ -91,6 +96,7 @@ export const POST = async (req) => {
       throw new Error("Failed to calculate the distance matrix.");
     }
   } catch (error) {
+    console.error("Error:", error);
     return new Response("Failed to save trip", { status: 500 });
   }
 };

@@ -94,7 +94,8 @@ const page = () => {
         throw new Error("Session not found");
       }
       console.log("user id:", session.user.id);
-      const saveTrip = await fetch("/api/trip", {
+      console.log("locations:", locations);
+      const fetchResponse = await fetch("/api/places/trip", {
         method: "POST",
         body: JSON.stringify({
           userId: session.user.id,
@@ -105,6 +106,7 @@ const page = () => {
       console.log(error);
     } finally {
       setSubmitting(false);
+      router.push(`/my-trip/${session?.user.id}`);
     }
   };
   return (

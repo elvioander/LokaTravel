@@ -2,12 +2,15 @@ import { Schema, model, models } from "mongoose";
 import Place from "./place";
 
 const TripSchema = new Schema({
-  OptimalRoute: {
+  optimalRoute: {
     type: [Number],
   },
-  selectedLocations: {
-    type: [Place],
-  },
+  selectedLocations: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Place",
+    },
+  ],
   creator: {
     type: Schema.Types.ObjectId,
     ref: "User",
