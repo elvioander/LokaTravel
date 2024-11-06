@@ -78,7 +78,7 @@ const MainHeader = ({
             onClick={() => setIsSideBarOpen(!isSideBarOpen)}
           />
           {isSideBarOpen && (
-            <div className="absolute -bottom-[5.5rem] right-4">
+            <div className="absolute -bottom-[8rem] right-4">
               <Sidebar onSignOut={signOut} />
             </div>
           )}

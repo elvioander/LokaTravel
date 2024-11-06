@@ -19,6 +19,8 @@ import {
   Time02Icon,
 } from "hugeicons-react";
 
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+
 const DetailsPage = ({ params }) => {
   const placeId = params.placeId;
 
@@ -85,6 +87,31 @@ const DetailsPage = ({ params }) => {
       console.error("Error fetching distance:", error);
     }
   };
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS,
+  });
+
+  const [map, setMap] = React.useState(null);
+  const containerStyle = {
+    width: "100%",
+    height: "400px",
+  };
+  const center = {
+    lat: post.Lat || 0,
+    lng: post.Long || 0,
+  };
+  const onLoad = React.useCallback(function callback(map) {
+    const bounds = new window.google.maps.LatLngBounds(center);
+    map.fitBounds(bounds);
+
+    setMap(map);
+  }, []);
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
+
   return (
     <>
       <MainHeader
@@ -150,6 +177,19 @@ const DetailsPage = ({ params }) => {
           >
             Locate Me
           </button>
+          {isLoaded && (
+            <div className="mt-6 rounded-lg overflow-hidden">
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={10}
+                onLoad={onLoad}
+                onUnmount={onUnmount}
+              >
+                <Marker position={center} />
+              </GoogleMap>
+            </div>
+          )}
         </div>
         <MainFooter />
       </section>

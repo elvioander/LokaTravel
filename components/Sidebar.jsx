@@ -8,6 +8,9 @@ const Sidebar = ({ onSignOut }) => {
       <Link href="/profile" className="px-3 py-1">
         My Profile
       </Link>
+      <Link href="/my-trip" className="px-3 py-1">
+        My Trip
+      </Link>
       <button className="text-red-500 font-bold px-3 py-1" onClick={onSignOut}>
         Sign Out
       </button>
