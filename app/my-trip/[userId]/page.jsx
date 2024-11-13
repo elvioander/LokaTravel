@@ -90,7 +90,7 @@ const page = ({ params }) => {
         setSearch={setSearch}
         handleSearch={handleSearch}
       />
-      <section className="flex flex-col w-full relative">
+      <section className="flex flex-col w-full relative pb-8">
         <div className="mt-28 px-4 flex items-center justify-between">
           <h2 className="font-bold text-3xl ">My Trips</h2>
           <Link href="#" className="flex items-center">
@@ -129,7 +129,6 @@ const page = ({ params }) => {
                   {trip.optimalRoute.map((l, index) => (
                     <p key={index} className="flex items-center gap-x-2">
                       <span className="font-medium">
-                        <span>&#40;{l}&#41; </span>
                         {trip.selectedLocations[l].Place_Name}
                       </span>{" "}
                       {index !== trip.optimalRoute.length - 1 && (
