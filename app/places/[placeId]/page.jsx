@@ -50,6 +50,16 @@ const DetailsPage = ({ params }) => {
     fetchPost();
   }, []);
 
+  const [cbf, setCbf] = useState([]);
+  useEffect(() => {
+    const fetchPost = async () => {
+      const response = await fetch(`/api/places/cbf/${placeId}`);
+      const cbf = await response.json();
+      setCbf(cbf);
+    };
+    fetchPost();
+  }, []);
+
   const [location, setLocation] = useState(null);
   const [distanceDuration, setDistanceDuration] = useState(null);
   const getUserLocation = () => {
@@ -139,17 +149,40 @@ const DetailsPage = ({ params }) => {
             closeHour={post.Closed_Hours}
           />
         </div>
-        <Image
-          src="/images/carousel1.jpg"
-          alt={`${post.Description} pictures`}
-          width={1080}
-          height={1920}
-          className="mt-8"
-        />
+        {post.Images && post.Images[0] && (
+          <Image
+            src={post.Images[0] || "/images/carousel1.jpg"}
+            alt={`${post.Description} pictures`}
+            width={1080}
+            height={1920}
+            className="mt-8 object-cover aspect-video object-top"
+          />
+        )}
         <div className="px-4 mt-8">
           <div className="border border-gray-300 shadow-[0_0_15px_rgba(0,0,0,0.3)] rounded-xl p-2">
             <p className="text-2xl font-bold">About</p>
             <Description id={1} text={post.Description} />
+          </div>
+        </div>
+        <div className="px-4 mt-4">
+          <h2 className="text-lg font-medium">Simillar Places</h2>
+          <div className="overflow-x-auto flex snap-x snap-mandatory scrollbar-hide space-x-2">
+            {cbf.map((c, index) => (
+              <Link
+                href={`/places/${c._id}`}
+                key={index}
+                className="border shrink-0 p-2 rounded-lg w-[75%]"
+              >
+                <Image
+                  src={c.Images?.[0] || "/images/fallback.jpg"}
+                  width={120}
+                  height={120}
+                  alt={c.Plce_Name}
+                  className="rounded-lg aspect-video object-cover w-full"
+                />
+                <p className="text-wrap mt-2 font-medium">{c.Place_Name}</p>
+              </Link>
+            ))}
           </div>
         </div>
         <div className="w-full px-4 mt-8">
