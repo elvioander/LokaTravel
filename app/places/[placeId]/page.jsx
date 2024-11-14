@@ -174,7 +174,7 @@ const DetailsPage = ({ params }) => {
                 className="border shrink-0 p-2 rounded-lg w-[75%]"
               >
                 <Image
-                  src={c.Images?.[0] || "/images/fallback.jpg"}
+                  src={c.Images?.[0] || "/images/carousel1.jpg"}
                   width={120}
                   height={120}
                   alt={c.Plce_Name}

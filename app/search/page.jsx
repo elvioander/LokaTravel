@@ -70,7 +70,7 @@ const SearchPage = () => {
             posts.map((post) => (
               <Link href={`/places/${post._id}`} className="flex gap-x-2">
                 <Image
-                  src="/images/carousel1.jpg"
+                  src={post.Images?.[0] || "/images/carousel1.jpg"}
                   width={135}
                   height={135}
                   className="aspect-square object-cover rounded-lg"
