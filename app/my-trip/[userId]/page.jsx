@@ -26,7 +26,7 @@ import {
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const page = ({ params }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const [search, setSearch] = useState("");
   const handleSearch = (e) => {

@@ -12,6 +12,7 @@ import Rating from "@/components/Rating";
 import OperatingTime from "@/components/OperatingTime";
 import MainFooter from "@/components/main-footer/MainFooter";
 import Description from "@/components/Description";
+import RatingComponent from "@/components/RatingComponent";
 
 import {
   Location03Icon,
@@ -136,6 +137,7 @@ const DetailsPage = ({ params }) => {
           <p>-</p>
           <div className="flex items-center gap-x-1">
             <Location03Icon />
+            {console.log("Post is", post)}
             <p className="font-medium">{post.City}, Indonesia</p>
           </div>
         </div>
@@ -156,6 +158,15 @@ const DetailsPage = ({ params }) => {
             width={1080}
             height={1920}
             className="mt-8 object-cover aspect-video object-top"
+          />
+        )}
+        {post.Images && !post.Images[0] && (
+          <Image
+            src={"/images/carousel1.jpg"}
+            alt={`${post.Description} pictures`}
+            width={1080}
+            height={1920}
+            className="mt-8 object-cover object-top"
           />
         )}
         <div className="px-4 mt-8">
@@ -223,6 +234,44 @@ const DetailsPage = ({ params }) => {
               </GoogleMap>
             </div>
           )}
+        </div>
+        <div className="mt-3 px-4">
+          <RatingComponent placeId={placeId} />
+        </div>
+        <div className="mt-4 p-4 border rounded-lg shadow-lg bg-white">
+          <h2 className="text-xl font-bold mb-4">Ratings</h2>
+          <div className="mt-4 p-4 border rounded-lg shadow-lg bg-white">
+            {post && post.Ratings && post.Ratings.length > 0 ? (
+              post.Ratings.map((rate, index) => (
+                <div
+                  key={index}
+                  className="flex items-center p-2 border-b last:border-b-0"
+                >
+                  <img
+                    src={rate.User_Id?.image} // Assuming `profileImage` is the field in the User model
+                    alt={`${rate.User_Id?.username}'s profile`}
+                    className="w-10 h-10 rounded-full mr-3 object-cover"
+                  />
+                  <div className="flex-1 flex justify-between items-center">
+                    <span className="text-gray-800 font-medium">
+                      {rate.User_Id?.username}{" "}
+                    </span>
+                    <span className="text-green-600 font-semibold">
+                      {rate.Score}
+                    </span>
+                  </div>
+                  <span className="text-gray-500 text-sm ml-4">
+                    {new Date(rate.Created_At).toLocaleDateString()}{" "}
+                    {/* Format the date */}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500 text-center py-4">
+                No ratings available.
+              </div>
+            )}
+          </div>
         </div>
         <MainFooter />
       </section>

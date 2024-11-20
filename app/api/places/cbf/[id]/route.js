@@ -95,6 +95,107 @@ function recommendSimilarPlaces(placeName, topN = 5) {
   return recommendedPlaces;
 }
 
+// Step 1: Build the user-item matrix
+function buildUserItemMatrix(tourismRatings) {
+  const matrix = {};
+  tourismRatings.forEach((rating) => {
+    const { User_Id, Place_Id, Place_Ratings } = rating;
+    if (!matrix[User_Id]) {
+      matrix[User_Id] = {};
+    }
+    matrix[User_Id][Place_Id] = parseFloat(Place_Ratings);
+  });
+  return matrix;
+}
+
+// Step 2: Calculate similarity between two users
+function calculateUserSimilarity(user1Ratings, user2Ratings) {
+  const commonPlaces = Object.keys(user1Ratings).filter((placeId) =>
+    Object.keys(user2Ratings).includes(placeId)
+  );
+
+  if (commonPlaces.length === 0) return 0;
+
+  const user1Vector = commonPlaces.map((placeId) => user1Ratings[placeId]);
+  const user2Vector = commonPlaces.map((placeId) => user2Ratings[placeId]);
+
+  return cosineSimilarity(user1Vector, user2Vector);
+}
+
+// Step 3: Get recommendations for a specific user
+function recommendForUser(userId, userItemMatrix, topN = 5) {
+  if (!userItemMatrix[userId]) {
+    return `User "${userId}" has no ratings.`;
+  }
+
+  const targetUserRatings = userItemMatrix[userId];
+  const similarityScores = {};
+
+  // Calculate similarity with all other users
+  Object.keys(userItemMatrix).forEach((otherUserId) => {
+    if (otherUserId !== userId) {
+      similarityScores[otherUserId] = calculateUserSimilarity(
+        targetUserRatings,
+        userItemMatrix[otherUserId]
+      );
+    }
+  });
+
+  // Sort users by similarity
+  const similarUsers = Object.keys(similarityScores)
+    .filter((otherUserId) => similarityScores[otherUserId] > 0)
+    .sort((a, b) => similarityScores[b] - similarityScores[a]);
+
+  const recommendations = {};
+
+  // Aggregate recommendations based on similar users
+  similarUsers.forEach((similarUserId) => {
+    const similarUserRatings = userItemMatrix[similarUserId];
+    Object.keys(similarUserRatings).forEach((placeId) => {
+      if (!targetUserRatings[placeId]) {
+        if (!recommendations[placeId]) {
+          recommendations[placeId] = {
+            totalScore: 0,
+            count: 0,
+          };
+        }
+        recommendations[placeId].totalScore +=
+          similarUserRatings[placeId] * similarityScores[similarUserId];
+        recommendations[placeId].count++;
+      }
+    });
+  });
+
+  // Calculate average scores and return top recommendations
+  const sortedRecommendations = Object.keys(recommendations)
+    .map((placeId) => ({
+      placeId,
+      score:
+        recommendations[placeId].totalScore / recommendations[placeId].count,
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, topN);
+
+  return sortedRecommendations.map((item) => {
+    const place = tourismWithId.find((place) => place.Place_Id == item.placeId);
+    return {
+      Place_Name: place.Place_Name,
+      Category: place.Category,
+      City: place.City,
+      Price: place.Price,
+      Rating: place.Rating,
+      Recommendation_Score: item.score,
+    };
+  });
+}
+const userItemMatrix = buildUserItemMatrix(tourismRatings);
+const recommendationsForUser = recommendForUser(
+  "672090a2fe444426343ee6ca",
+  userItemMatrix,
+  5
+);
+console.log("Collaborative", recommendationsForUser);
+
 import Place from "@/models/place";
 import { connectToDB } from "@/utils/database";
 
