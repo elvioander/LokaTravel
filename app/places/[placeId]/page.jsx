@@ -146,13 +146,12 @@ const DetailsPage = ({ params }) => {
           #<span>{post.Category}</span>
         </p>
         <p className="mt-4 font-medium underline px-4">Write a review</p>
-        <div className="mt-4">
+        <div className="mt-4 mb-4">
           <OperatingTime
             openHour={post.Opening_Hours}
             closeHour={post.Closed_Hours}
           />
         </div>
-        import Carousel from './Carousel'; // Import the Carousel component ...
         {post.Images && post.Images.length > 0 ? (
           <Carousel images={post.Images} /> // Use the Carousel component
         ) : (
