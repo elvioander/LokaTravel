@@ -243,27 +243,34 @@ const DetailsPage = ({ params }) => {
           <div className="mt-4 p-4 border rounded-lg shadow-lg bg-white">
             {post && post.Ratings && post.Ratings.length > 0 ? (
               post.Ratings.map((rate, index) => (
-                <div
-                  key={index}
-                  className="flex items-center p-2 border-b last:border-b-0"
-                >
-                  <img
-                    src={rate.User_Id?.image} // Assuming `profileImage` is the field in the User model
-                    alt={`${rate.User_Id?.username}'s profile`}
-                    className="w-10 h-10 rounded-full mr-3 object-cover"
-                  />
-                  <div className="flex-1 flex justify-between items-center">
-                    <span className="text-gray-800 font-medium">
-                      {rate.User_Id?.username}{" "}
-                    </span>
-                    <span className="text-green-600 font-semibold">
-                      {rate.Score}
-                    </span>
+                <div key={index} className="p-2 border-b last:border-b-0">
+                  <div className="flex items-center gap-x-1">
+                    <img
+                      src={rate.User_Id?.image} // Assuming `profileImage` is the field in the User model
+                      alt={`${rate.User_Id?.username}'s profile`}
+                      className="w-10 h-10 rounded-full mr-3 object-cover"
+                    />
+                    <div className="flex-1 flex justify-between items-center">
+                      <div className="flex flex-col">
+                        <span className="text-gray-800 font-medium">
+                          {rate.User_Id?.username}{" "}
+                        </span>
+                        <span className="text-gray-500 text-sm">
+                          {new Date(rate.Created_At).toLocaleString("id-ID", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true, // 12-hour format with AM/PM
+                          })}
+                        </span>
+                      </div>
+                      <span className="text-green-600 text-xl font-semibold">
+                        {rate.Score}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-gray-500 text-sm ml-4">
-                    {new Date(rate.Created_At).toLocaleDateString()}{" "}
-                    {/* Format the date */}
-                  </span>
                 </div>
               ))
             ) : (

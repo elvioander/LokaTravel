@@ -1,5 +1,7 @@
 import React from "react";
 
+import Link from "next/link";
+
 import {
   Facebook02Icon,
   InstagramIcon,
@@ -16,14 +18,14 @@ const MainFooter = () => {
     <footer className="w-full mt-12 bg-[#f2f2f2] p-7">
       <div className="flex flex-col gap-y-1">
         <p className="font-medium text-xl">About LokaTravel</p>
-        <p>About Us</p>
+        <Link href="/about-us">About Us</Link>
         <p>Blog</p>
       </div>
       <div className="flex flex-col gap-y-1 mt-4">
         <p className="font-medium text-xl">Help and Guide</p>
-        <p>Contact Us</p>
+        <Link href="/contact-us">Contact</Link>
         <p>Terms & Conditions</p>
-        <p>Privacy Policy</p>
+        <Link href="/privacy-policy">Privacy Policy</Link>
       </div>
       <form className="mt-8">
         <select
@@ -55,10 +57,10 @@ const MainFooter = () => {
         </p>
       </div>
       <p className="text-sm mt-4 text-justify">
-        This is the version of our website addressed to speakers of English in
-        the United States. If you are a resident of another country or region,
-        please select the appropriate version of Tripadvisor for your country or
-        region in the drop-down menu. more
+        This is the version of our website addressed to Indonesian speakers in
+        Indonesia. If you are a resident of another country or region, please
+        select the appropriate English language version for your country or
+        region in the drop-down menu.
       </p>
     </footer>
   );

@@ -11,6 +11,7 @@ import Login from "@/components/login/Login";
 import PlaceSection from "@/components/PlaceSection";
 
 import { useRouter } from "next/navigation";
+import { getSession } from "next-auth/react";
 
 const Hero = () => {
   const router = useRouter();
@@ -58,6 +59,33 @@ const Hero = () => {
   const [culturePosts, setCulturePosts] = useState([]);
   const [nauticalPosts, setNauticalPosts] = useState([]);
   const [topPosts, setTopPosts] = useState([]);
+  const [personalizedPosts, setPersonalizedPosts] = useState([]);
+  const [personalizedPage, setPersonalizedPage] = useState(1);
+  const [hasMorePersonalized, setHasMorePersonalized] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const fetchPersonalizedPosts = async (page = 1) => {
+    try {
+      const session = await getSession();
+      if (session?.user?.id) {
+        const personalizedResponse = await fetch(
+          `/api/places/cf/${session.user.id}?page=${page}`
+        );
+        const data = await personalizedResponse.json();
+
+        if (page === 1) {
+          setPersonalizedPosts(data.recommendations);
+        } else {
+          setPersonalizedPosts((prev) => [...prev, ...data.recommendations]);
+        }
+
+        setHasMorePersonalized(data.hasMore);
+        setPersonalizedPage(page); // Update the current page state
+      }
+    } catch (error) {
+      console.error("Error fetching personalized recommendations:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchCulturePosts = async () => {
       const cultureResponse = await fetch(`/api/places/culture`);
@@ -74,10 +102,22 @@ const Hero = () => {
       const topData = await topResponse.json();
       setTopPosts(topData);
     };
+
     fetchCulturePosts();
     fetchNauticalPosts();
     fetchTopPosts();
+    fetchPersonalizedPosts(1);
   }, []);
+
+  const handleLoadMore = async () => {
+    if (!isLoadingMore && hasMorePersonalized) {
+      setIsLoadingMore(true);
+      const nextPage = personalizedPage + 1;
+      await fetchPersonalizedPosts(nextPage);
+      setPersonalizedPage(nextPage);
+      setIsLoadingMore(false);
+    }
+  };
 
   return (
     <>
@@ -132,6 +172,26 @@ const Hero = () => {
             title="Top experiences on Lokatravel"
             type="top"
           />
+          {personalizedPosts.length > 0 && (
+            <>
+              <PlaceSection
+                places={personalizedPosts}
+                title="Recommended for you"
+                type="personalized"
+              >
+                Discover places tailored to your interests based on your ratings
+              </PlaceSection>
+              {hasMorePersonalized && (
+                <button
+                  onClick={handleLoadMore}
+                  disabled={isLoadingMore}
+                  className="mt-4 px-6 py-2 w-48 mx-auto bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+                >
+                  {isLoadingMore ? "Loading..." : "Load More"}
+                </button>
+              )}
+            </>
+          )}
         </div>
       </section>
       <MainFooter />

@@ -194,7 +194,7 @@ const recommendationsForUser = recommendForUser(
   userItemMatrix,
   5
 );
-console.log("Collaborative", recommendationsForUser);
+/* console.log("Collaborative", recommendationsForUser); */
 
 import Place from "@/models/place";
 import { connectToDB } from "@/utils/database";

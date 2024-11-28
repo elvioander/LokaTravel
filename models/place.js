@@ -48,7 +48,6 @@ const PlaceSchema = new Schema({
   // Estimated time to spend at the place, in minutes
   Time_Minutes: {
     type: Number,
-    required: true, // This field is mandatory
   },
 
   // Geographical coordinates of the place

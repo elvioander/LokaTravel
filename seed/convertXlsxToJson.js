@@ -7,6 +7,8 @@ const workbook = xlsx.readFile("./data/tourism.xlsx");
 const sheet_name_list = workbook.SheetNames;
 const jsonData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 
+const data = JSON.parse(fs.readFileSync("./seed/data.json", "utf-8"));
+
 // Pexels API configuration
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 const pexelsApiUrl = "https://api.pexels.com/v1/search";
@@ -77,4 +79,36 @@ async function formatData() {
   console.log("Data saved with images.");
 }
 
-formatData();
+async function updateDataWithImages() {
+  // Create a copy of the original data to modify
+  const updatedData = [...data];
+
+  // Iterate through places without images
+  for (let i = 0; i < updatedData.length; i++) {
+    // Check if the place has no images
+    if (!updatedData[i].Images || updatedData[i].Images.length === 0) {
+      try {
+        // Fetch images for the place
+        const images = await fetchImages(updatedData[i].Place_Name);
+
+        // If images are found, update the place
+        if (images.length > 0) {
+          updatedData[i].Images = images;
+          console.log(
+            `Added ${images.length} images for ${updatedData[i].Place_Name}`
+          );
+        }
+      } catch (error) {
+        console.error(`Error processing ${updatedData[i].Place_Name}:`, error);
+      }
+    }
+  }
+
+  // Write the updated data back to the file
+  fs.writeFileSync("./seed/data.json", JSON.stringify(updatedData, null, 2));
+  console.log("Data updated with images successfully.");
+}
+
+// Run the update function
+updateDataWithImages();
+//formatData();
