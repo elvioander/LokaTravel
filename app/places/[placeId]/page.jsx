@@ -13,6 +13,7 @@ import OperatingTime from "@/components/OperatingTime";
 import MainFooter from "@/components/main-footer/MainFooter";
 import Description from "@/components/Description";
 import RatingComponent from "@/components/RatingComponent";
+import Carousel from "./Carousel";
 
 import {
   Location03Icon,
@@ -151,16 +152,10 @@ const DetailsPage = ({ params }) => {
             closeHour={post.Closed_Hours}
           />
         </div>
-        {post.Images && post.Images[0] && (
-          <Image
-            src={post.Images[0] || "/images/carousel1.jpg"}
-            alt={`${post.Description} pictures`}
-            width={1080}
-            height={1920}
-            className="mt-8 object-cover aspect-video object-top"
-          />
-        )}
-        {post.Images && !post.Images[0] && (
+        import Carousel from './Carousel'; // Import the Carousel component ...
+        {post.Images && post.Images.length > 0 ? (
+          <Carousel images={post.Images} /> // Use the Carousel component
+        ) : (
           <Image
             src={"/images/carousel1.jpg"}
             alt={`${post.Description} pictures`}

@@ -172,7 +172,7 @@ const Hero = () => {
             title="Top experiences on Lokatravel"
             type="top"
           />
-          {personalizedPosts.length > 0 && (
+          {personalizedPosts && personalizedPosts.length > 0 && (
             <>
               <PlaceSection
                 places={personalizedPosts}
