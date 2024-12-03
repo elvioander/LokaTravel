@@ -166,16 +166,31 @@ const page = () => {
 };
 
 function LocationPopup({ availableLocations, onSelectLocation, onClose }) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter available locations based on the search query
+  const filteredLocations = availableLocations.filter((location) =>
+    location.Place_Name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="absolute top-1/2 left-1/2 transul -translate-x-1/2 -translate-y-1/2 p-3 border-2 border-gray-300 shadow-md rounded-xl w-[90vw] h-[45vh] overflow-hidden overflow-y-auto bg-white">
+    <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] p-3 border-2 border-gray-300 shadow-md rounded-xl w-[90vw] h-[45vh] overflow-hidden overflow-y-auto bg-white">
       <div className="flex justify-between items-center">
         <h3 className="text-2xl font-semibold">Select a Location</h3>
         <button onClick={onClose} className="text-red-500">
           Close
         </button>
       </div>
+      {/* Search Input Field */}
+      <input
+        type="text"
+        placeholder="Search locations..."
+        className="mt-3 w-full border border-gray-300 rounded-md px-2 py-1"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <ul className="mt-3">
-        {availableLocations.map((location, index) => (
+        {filteredLocations.map((location) => (
           <li key={location.id} className="">
             <button
               className="text-lg font-medium text-start mb-2 text-blue-500"
