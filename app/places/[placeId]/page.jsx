@@ -174,7 +174,7 @@ const DetailsPage = ({ params }) => {
         <p className="mt-2 px-4 text-gray-500">
           #<span>{post.Category}</span>
         </p>
-        <p className="mt-4 font-medium underline px-4">Write a review</p>
+        <p className="mt-4 font-medium underline px-4">Rp.{post.Price}</p>
         <div className="mt-4 mb-4">
           <OperatingTime
             openHour={post.Opening_Hours}
