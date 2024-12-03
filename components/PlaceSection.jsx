@@ -1,6 +1,7 @@
 import React from "react";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import { StarIcon, HeartAddIcon } from "hugeicons-react";
 import Rating from "./Rating";
@@ -13,7 +14,8 @@ const PlaceSection = ({ places, title, type, children }) => {
       <div className="overflow-x-auto flex snap-x snap-mandatory scrollbar-hide space-x-2">
         {!type
           ? places.map((place) => (
-              <div
+              <Link
+                href={`/places/${place._id}`}
                 key={place._id}
                 className="snap-center shrink-0 w-[60vw] flex items-center justify-center overflow-hidden"
               >
@@ -33,10 +35,11 @@ const PlaceSection = ({ places, title, type, children }) => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           : places.map((place) => (
-              <div
+              <Link
+                href={`/places/${place._id}`}
                 key={place._id}
                 className="snap-center shrink-0 w-[60vw] overflow-hidden"
               >
@@ -62,7 +65,7 @@ const PlaceSection = ({ places, title, type, children }) => {
                     per adult
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
       </div>
     </div>
