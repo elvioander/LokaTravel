@@ -91,7 +91,6 @@ const PlaceSchema = new Schema({
       // The user who gave the rating (could be a reference to a User model)
       User_Id: {
         type: Schema.Types.ObjectId,
-        required: true, // This field is mandatory
         ref: "User", // Reference to the User model
       },
       // The rating score given by the user (e.g., 1 to 5)

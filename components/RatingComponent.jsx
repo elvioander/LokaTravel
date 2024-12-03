@@ -37,8 +37,11 @@ const RatingComponent = ({ placeId, onRatingSubmit }) => {
       if (response.ok) {
         // Call the onRatingSubmit prop to trigger a refresh in the parent component
         if (onRatingSubmit) {
-          onRatingSubmit();
+          onRatingSubmit(data.newRating); // Pass the new rating if needed
         }
+
+        // Optional: Show success message
+        alert("Rating submitted successfully!");
       } else {
         // Handle error case
         console.error("Rating submission failed:", data.message);

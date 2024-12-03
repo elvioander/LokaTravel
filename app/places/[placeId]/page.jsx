@@ -262,7 +262,13 @@ const DetailsPage = ({ params }) => {
           <div className="mt-3 px-4">
             <RatingComponent
               placeId={placeId}
-              onRatingSubmit={() => {
+              onRatingSubmit={(newRating) => {
+                // Optionally update the rating in the UI
+                setPost((prevPost) => ({
+                  ...prevPost,
+                  Rating: newRating,
+                }));
+                // Trigger a re-fetch or update of ratings
                 setDeleteRatingTrigger((prev) => prev + 1);
               }}
             />
