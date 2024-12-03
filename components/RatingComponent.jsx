@@ -2,34 +2,53 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { FaStar } from "react-icons/fa"; // Import star icon from react-icons
 
-const RatingComponent = ({ placeId }) => {
+const RatingComponent = ({ placeId, onRatingSubmit }) => {
   const { data: session, status } = useSession();
   const userId = session?.user.id;
 
   const [score, setScore] = useState(1); // Default rating score
-  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRatingSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("/api/places/rate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        placeId,
-        userId,
-        score,
-      }),
-    });
+    if (!userId) {
+      alert("Please log in to submit a rating");
+      return;
+    }
 
-    const data = await response.json();
+    setIsSubmitting(true);
 
-    if (response.ok) {
-      setMessage("Rating submitted successfully!");
-    } else {
-      setMessage(data.message || "Something went wrong.");
+    try {
+      const response = await fetch("/api/places/rate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          placeId,
+          userId,
+          score,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Call the onRatingSubmit prop to trigger a refresh in the parent component
+        if (onRatingSubmit) {
+          onRatingSubmit();
+        }
+      } else {
+        // Handle error case
+        console.error("Rating submission failed:", data.message);
+        alert(data.message || "Failed to submit rating");
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+      alert("An error occurred while submitting the rating");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -54,12 +73,14 @@ const RatingComponent = ({ placeId }) => {
         <button
           type="button"
           onClick={handleRatingSubmit}
-          className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-300"
+          disabled={isSubmitting}
+          className={`bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-300 ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          Submit Rating
+          {isSubmitting ? "Submitting..." : "Submit Rating"}
         </button>
       </div>
-      {message && <p>{message}</p>}
     </div>
   );
 };

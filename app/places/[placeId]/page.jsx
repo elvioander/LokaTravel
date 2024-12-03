@@ -3,6 +3,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,7 @@ import {
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const DetailsPage = ({ params }) => {
+  const { data: session } = useSession();
   const placeId = params.placeId;
 
   const router = useRouter();
@@ -43,6 +45,8 @@ const DetailsPage = ({ params }) => {
   }, []);
 
   const [post, setPost] = useState([]);
+  const [deleteRatingTrigger, setDeleteRatingTrigger] = useState(0);
+
   useEffect(() => {
     const fetchPost = async () => {
       const response = await fetch(`/api/places/${placeId}`);
@@ -50,7 +54,29 @@ const DetailsPage = ({ params }) => {
       setPost(data);
     };
     fetchPost();
-  }, []);
+  }, [placeId, deleteRatingTrigger]);
+
+  const handleDeleteRating = async (placeId, userId) => {
+    try {
+      const response = await fetch(`/api/places/${placeId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.ok) {
+        // Increment the trigger to re-fetch the place data
+        setDeleteRatingTrigger((prev) => prev + 1);
+      } else {
+        const errorData = await response.text();
+        console.error("Error deleting rating:", errorData);
+      }
+    } catch (error) {
+      console.error("Error deleting rating:", error);
+    }
+  };
 
   const [cbf, setCbf] = useState([]);
   useEffect(() => {
@@ -230,7 +256,14 @@ const DetailsPage = ({ params }) => {
           )}
         </div>
         <div className="mt-3 px-4">
-          <RatingComponent placeId={placeId} />
+          <div className="mt-3 px-4">
+            <RatingComponent
+              placeId={placeId}
+              onRatingSubmit={() => {
+                setDeleteRatingTrigger((prev) => prev + 1);
+              }}
+            />
+          </div>
         </div>
         <div className="mt-4 p-4 border rounded-lg shadow-lg bg-white">
           <h2 className="text-xl font-bold mb-4">Ratings</h2>
@@ -240,7 +273,7 @@ const DetailsPage = ({ params }) => {
                 <div key={index} className="p-2 border-b last:border-b-0">
                   <div className="flex items-center gap-x-1">
                     <img
-                      src={rate.User_Id?.image} // Assuming `profileImage` is the field in the User model
+                      src={rate.User_Id?.image}
                       alt={`${rate.User_Id?.username}'s profile`}
                       className="w-10 h-10 rounded-full mr-3 object-cover"
                     />
@@ -256,13 +289,39 @@ const DetailsPage = ({ params }) => {
                             day: "2-digit",
                             hour: "2-digit",
                             minute: "2-digit",
-                            hour12: true, // 12-hour format with AM/PM
+                            hour12: true,
                           })}
                         </span>
                       </div>
-                      <span className="text-green-600 text-xl font-semibold">
-                        {rate.Score}
-                      </span>
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-green-600 text-xl font-semibold mr-2">
+                          {rate.Score}
+                        </span>
+                        {session?.user.id === rate.User_Id?._id && (
+                          <button
+                            onClick={() =>
+                              handleDeleteRating(placeId, session.user.id)
+                            }
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M3 6h18" />
+                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
