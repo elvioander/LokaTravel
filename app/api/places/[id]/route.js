@@ -20,25 +20,34 @@ export const DELETE = async (request, { params }) => {
   try {
     await connectToDB();
 
-    const placeId = params.id; // Use the actual MongoDB _id
-    const { userId } = await request.json();
+    const placeId = params.id; // MongoDB _id of the place
+    const { userId, ratingId } = await request.json(); // Include ratingId
 
-    // Find the place and remove the rating
+    // Find the place
     const place = await Place.findById(placeId);
 
     if (!place) {
       return new Response("Place not found", { status: 404 });
     }
 
-    // Filter out the rating for the given userId
-    place.Ratings = place.Ratings.filter(
-      (rating) => rating.User_Id.toString() !== userId
+    // Find the specific rating index
+    const ratingIndex = place.Ratings.findIndex(
+      (rating) =>
+        rating.User_Id.toString() === userId &&
+        rating._id.toString() === ratingId
     );
 
-    // Save the updated place
-    await place.save();
+    // If rating found, remove it
+    if (ratingIndex !== -1) {
+      place.Ratings.splice(ratingIndex, 1);
 
-    return new Response("Rating deleted successfully", { status: 200 });
+      // Save the updated place
+      await place.save();
+
+      return new Response("Rating deleted successfully", { status: 200 });
+    } else {
+      return new Response("Rating not found", { status: 404 });
+    }
   } catch (error) {
     console.error("Error deleting rating:", error);
     return new Response("Internal Server Error", { status: 500 });

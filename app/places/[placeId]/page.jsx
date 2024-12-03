@@ -56,14 +56,17 @@ const DetailsPage = ({ params }) => {
     fetchPost();
   }, [placeId, deleteRatingTrigger]);
 
-  const handleDeleteRating = async (placeId, userId) => {
+  const handleDeleteRating = async (placeId, userId, ratingId) => {
     try {
       const response = await fetch(`/api/places/${placeId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({
+          userId,
+          ratingId,
+        }),
       });
 
       if (response.ok) {
@@ -300,7 +303,11 @@ const DetailsPage = ({ params }) => {
                         {session?.user.id === rate.User_Id?._id && (
                           <button
                             onClick={() =>
-                              handleDeleteRating(placeId, session.user.id)
+                              handleDeleteRating(
+                                placeId,
+                                session.user.id,
+                                rate._id
+                              )
                             }
                             className="text-red-500 hover:text-red-700"
                           >
