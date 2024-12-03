@@ -80,6 +80,7 @@ const Hero = () => {
 
         setHasMorePersonalized(data.hasMore);
         setPersonalizedPage(page); // Update the current page state
+        console.log("personalized post is", personalizedPosts);
       }
     } catch (error) {
       console.error("Error fetching personalized recommendations:", error);

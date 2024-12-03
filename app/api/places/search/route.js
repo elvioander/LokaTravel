@@ -15,7 +15,8 @@ export const GET = async (request) => {
     const places = await Place.find({
       $or: [
         { Place_Name: { $regex: regex } }, // Search by Place_Name
-        { Description: { $regex: regex } }, // Optionally, search by Description
+        { Description: { $regex: regex } },
+        { City: { $regex: regex } },
       ],
     });
 

@@ -152,6 +152,7 @@ async function recommendForUser(userId, userItemMatrix) {
           Price: dbPlace.Price,
           Rating: dbPlace.Rating,
           Description: dbPlace.Description,
+          Images: dbPlace.Images, // Include Images array
           Recommendation_Score: rec.score,
         };
       }
@@ -206,8 +207,6 @@ export const GET = async (request, { params }) => {
         { status: 404 }
       );
     }
-
-    console.log("recommendation is", allRecommendations);
 
     // Paginate the recommendations
     const paginatedRecommendations = allRecommendations.slice(

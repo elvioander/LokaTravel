@@ -18,13 +18,15 @@ const PlaceSection = ({ places, title, type, children }) => {
                 className="snap-center shrink-0 w-[60vw] flex items-center justify-center overflow-hidden"
               >
                 <div className="relative">
-                  <Image
-                    src="/images/carousel1.jpg"
-                    className="object-cover object-center aspect-[5/4] rounded-lg"
-                    alt={place.Place_Name}
-                    width={400}
-                    height={400}
-                  />
+                  {place.Images && place.Images[0] && (
+                    <Image
+                      src={place.Images[0] || "/public/images/carousel1.jpg"}
+                      className="object-cover object-center aspect-[5/4] rounded-lg"
+                      alt={place.Place_Name}
+                      width={400}
+                      height={400}
+                    />
+                  )}
                   <div className="mt-4 absolute bottom-2 left-4">
                     <p className="text-[22px] text-white font-bold">
                       {place.Place_Name}
@@ -39,13 +41,15 @@ const PlaceSection = ({ places, title, type, children }) => {
                 className="snap-center shrink-0 w-[60vw] overflow-hidden"
               >
                 <div className="relative">
-                  <Image
-                    src="/images/carousel1.jpg"
-                    className="object-cover object-center aspect-square rounded-lg"
-                    alt={place.Place_Name}
-                    width={400}
-                    height={400}
-                  />
+                  {place.Images && place.Images[0] && (
+                    <Image
+                      src={place.Images[0] || "/public/images/carousel1.jpg"}
+                      className="object-cover object-center aspect-square rounded-lg"
+                      alt={place.Place_Name}
+                      width={400}
+                      height={400}
+                    />
+                  )}
                   <div className="bg-white rounded-full p-2 absolute top-2 right-2">
                     <HeartAddIcon />
                   </div>
