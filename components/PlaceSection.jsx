@@ -17,7 +17,7 @@ const PlaceSection = ({ places, title, type, children }) => {
               <Link
                 href={`/places/${place._id}`}
                 key={place._id}
-                className="snap-center shrink-0 w-[60vw] flex items-center justify-center overflow-hidden"
+                className="snap-center shrink-0 w-[60vw] sm:w-auto  flex items-center justify-center overflow-hidden"
               >
                 <div className="relative">
                   {place.Images && place.Images[0] && (
@@ -41,7 +41,7 @@ const PlaceSection = ({ places, title, type, children }) => {
               <Link
                 href={`/places/${place._id}`}
                 key={place._id}
-                className="snap-center shrink-0 w-[60vw] overflow-hidden"
+                className="snap-center shrink-0 w-[60vw] sm:w-auto overflow-hidden"
               >
                 <div className="relative">
                   {place.Images && place.Images[0] && (
