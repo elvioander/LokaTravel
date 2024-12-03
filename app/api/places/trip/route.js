@@ -100,3 +100,23 @@ export const POST = async (req) => {
     return new Response("Failed to save trip", { status: 500 });
   }
 };
+
+export const DELETE = async (req) => {
+  try {
+    await connectToDB();
+
+    const { tripId } = await req.json();
+
+    // Find and delete the trip
+    const deletedTrip = await Trip.findByIdAndDelete(tripId);
+
+    if (!deletedTrip) {
+      return new Response("Trip not found", { status: 404 });
+    }
+
+    return new Response("Trip deleted successfully", { status: 200 });
+  } catch (error) {
+    console.error("Error deleting trip:", error);
+    return new Response("Internal Server Error", { status: 500 });
+  }
+};

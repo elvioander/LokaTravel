@@ -83,6 +83,29 @@ const page = ({ params }) => {
     };
     fetchTrips();
   }, []);
+
+  const handleDeleteTrip = async (tripId) => {
+    try {
+      const response = await fetch("/api/places/trip", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tripId }),
+      });
+
+      if (response.ok) {
+        // Remove the deleted trip from the state
+        setTrips(trips.filter((trip) => trip._id !== tripId));
+      } else {
+        console.error("Failed to delete trip");
+        alert("Failed to delete trip");
+      }
+    } catch (error) {
+      console.error("Error deleting trip:", error);
+      alert("An error occurred while deleting the trip");
+    }
+  };
   return (
     <>
       <MainHeader
@@ -99,13 +122,13 @@ const page = ({ params }) => {
           </Link>
         </div>
 
-        {!trips ? (
+        {!trips || trips.length === 0 ? (
           <p className="px-4 mt-4">You haven't planned a trip just yet.</p>
         ) : (
           trips.map((trip, index) => (
             <div
-              className="px-4 mx-4 mt-3 bg-blue-400 text-white p-3 rounded-xl"
-              key={index}
+              key={trip._id}
+              className="px-4 mx-4 mt-3 bg-blue-400 text-white p-3 rounded-xl relative"
             >
               <p className="text-xl font-semibold">Trip #{index + 1}</p>
 
@@ -138,6 +161,14 @@ const page = ({ params }) => {
                   ))}
                 </div>
               </div>
+
+              {/* Add delete button */}
+              <button
+                onClick={() => handleDeleteTrip(trip._id)}
+                className="absolute top-3 right-4 text-red-500 bg-white rounded-lg px-3 py-1 hover:text-red-200"
+              >
+                Delete
+              </button>
             </div>
           ))
         )}

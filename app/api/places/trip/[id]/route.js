@@ -7,7 +7,7 @@ export const GET = async (req, { params }) => {
     const place = await Trip.find({ creator: params.id }).populate(
       "selectedLocations"
     );
-    console.log("Place is:", place);
+    console.log("selected is:", place);
     if (!place) return new Response("Trip Not Found", { status: 404 });
     return new Response(JSON.stringify(place), { status: 200 });
   } catch (error) {
