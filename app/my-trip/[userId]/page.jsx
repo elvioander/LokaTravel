@@ -114,7 +114,24 @@ const page = ({ params }) => {
         handleSearch={handleSearch}
       />
       <section className="flex flex-col w-full relative pb-8">
-        <div className="mt-28 px-4 flex items-center justify-between">
+        <div className="mt-28 px-4 flex items-center space-x-4">
+          {session?.user?.image && (
+            <Image
+              src={session.user.image}
+              alt="Profile Picture"
+              width={80}
+              height={80}
+              className="rounded-full"
+            />
+          )}
+          <div>
+            <h1 className="text-2xl font-bold">
+              {session?.user?.name || "User Profile"}
+            </h1>
+            <p className="text-gray-600">{session?.user?.email}</p>
+          </div>
+        </div>
+        <div className="mt-28 sm:mt-16 px-4 flex items-center justify-between">
           <h2 className="font-bold text-3xl ">My Trips</h2>
           <Link href="#" className="flex items-center">
             <p className="text-blue-600">See all</p>

@@ -41,10 +41,28 @@ export const DELETE = async (request, { params }) => {
     if (ratingIndex !== -1) {
       place.Ratings.splice(ratingIndex, 1);
 
+      // Recalculate average rating
+      if (place.Ratings.length > 0) {
+        const totalRatings = place.Ratings.reduce(
+          (sum, rating) => sum + rating.Score,
+          0
+        );
+        place.Rating = Number((totalRatings / place.Ratings.length).toFixed(1));
+      } else {
+        // If no ratings left, set average rating to 0
+        place.Rating = 0;
+      }
+
       // Save the updated place
       await place.save();
 
-      return new Response("Rating deleted successfully", { status: 200 });
+      return new Response(
+        JSON.stringify({
+          message: "Rating deleted successfully",
+          newRating: place.Rating,
+        }),
+        { status: 200 }
+      );
     } else {
       return new Response("Rating not found", { status: 404 });
     }
